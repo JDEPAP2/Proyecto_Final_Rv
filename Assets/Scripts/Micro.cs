@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Audio;
 
 public class Micro : MonoBehaviour
 {
@@ -12,37 +13,32 @@ public class Micro : MonoBehaviour
     public ConfigAudio config;
     private float[] audioData = new float[1024];
     private AudioSource audioSource;
-
+    public AudioMixerGroup mixer;
     public UnityEvent onAmplitudGreatherThanMax;
     public UnityEvent<float> onAmplitudeChange;
 
 
-    
-
     void Start()
     {
         audioSource = gameObject.AddComponent<AudioSource>();
-        audioSource.clip = Microphone.Start(config.activeMicro, true, 1, 22050);
-        audioSource.loop = true;
+        initMicro();
     }
 
     private void FixedUpdate()
     {
-        audioSource.clip.GetData(audioData, audioSource.timeSamples);
-  
-        float valorMax = Mathf.Abs(audioData[0]);
+        audioSource.GetOutputData(audioData,0);
+        float maxValue = audioData[0];
         for (int i = 0; i < audioData.Length; i += 2)
         {
-            if (Mathf.Abs(audioData[i]) > valorMax)
+            if(maxValue < Mathf.Abs(audioData[i]))
             {
-                valorMax = Mathf.Abs(audioData[i]);
-                amplitude = valorMax*sensibility;
-                if(amplitude > maxAmplitude) { amplitude = maxAmplitude; }
+                amplitude = Mathf.Abs(audioData[i]) * sensibility;
+                if (amplitude > maxAmplitude) { amplitude = maxAmplitude; }
             }
+            
         }
 
-        //float value = amplitude / maxAmplitude;
-        float value = Mathf.Lerp(old, amplitude, 0.4f) / maxAmplitude;
+        float value = amplitude / maxAmplitude;
         onAmplitudeChange.Invoke(value);
 
         if (value > 0.9)
@@ -54,15 +50,31 @@ public class Micro : MonoBehaviour
 
     }
 
+    public void initMicro()
+    {
+        Microphone.End(config.activeMicro);
+        if (config.activeMicro == null || config.activeMicro.Length == 0)
+        {
+            enabled = false;
+        }
+        else
+        {
+            audioSource.clip = Microphone.Start(config.activeMicro, true, 1, 33200);
+            audioSource.outputAudioMixerGroup = mixer;
+            audioSource.loop = true;
+            audioSource.Play();
+        }
+    }
+
     void OnDisable()
     {
-        audioSource.Stop();
-        Microphone.End(null);
+        audioSource?.Stop();
+        Microphone.End(config.activeMicro);
     }
 
     private void OnDestroy()
     {
-        audioSource.Stop();
-        Microphone.End(null);
+        audioSource?.Stop();
+        Microphone.End(config.activeMicro);
     }
 }
