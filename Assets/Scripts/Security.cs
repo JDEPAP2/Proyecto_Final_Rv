@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Security : MonoBehaviour
 {
+    public UnityEvent onAlert;
     public AudioSource aud;
     public bool wall;
     
@@ -14,6 +16,7 @@ public class Security : MonoBehaviour
             if (!aud.isPlaying)
             {
                 aud.Play();
+                onAlert.Invoke();
             }
         }
     }
