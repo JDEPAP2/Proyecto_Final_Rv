@@ -1,52 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
 public class DisparoRay : MonoBehaviour
 {
     public Transform firePoint;
     public int damage = 25;
+
     public LineRenderer lineRenderer;
-    private float tiempoDisparo = 0.5f;
-    private float tiempoRestante;
+
     public GameObject impact;
 
-    // Start is called before the first frame update
-    void Start()
+    public void Disparar()
     {
-        tiempoRestante = tiempoDisparo;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (tiempoRestante > 0)
-        {
-            tiempoRestante -= Time.deltaTime;
-        }
-    }
-
-    public void Disparar(bool disp)
-    {
-        if (tiempoRestante <= 0 && disp)
-        {
-            //anim.SetBool("Fire", true);
-            StartCoroutine(Disparo());
-        }
-        if (!disp)
-        {
-            //anim.SetBool("Fire", false);
-        }
+        StartCoroutine(Disparo());
     }
 
     IEnumerator Disparo()
     {
         RaycastHit hit;
-        bool hitInfo = Physics.Raycast(firePoint.position, firePoint.forward, out hit, 50f);
+        bool hitInfo = Physics.Raycast(firePoint.position, firePoint.right, out hit, 50f);
 
         if (hitInfo)
         {
+            //Enemigos enemigo = hit.transform.GetComponent<Enemigos>();
+
+            //if (enemigo != null)
+            //{
+            //    //enemigo.takeDamage(damage);
+            //    Debug.Log("Enemigo Reconocido");
+            //}
+
             lineRenderer.SetPosition(0, firePoint.position);
             lineRenderer.SetPosition(1, hit.point);
 
@@ -57,12 +42,11 @@ public class DisparoRay : MonoBehaviour
             lineRenderer.SetPosition(0, firePoint.position);
             lineRenderer.SetPosition(1, firePoint.position + firePoint.forward * 20);
         }
+
         lineRenderer.enabled = true;
 
         yield return new WaitForSeconds(0.02f);
 
         lineRenderer.enabled = false;
-
-
     }
 }

@@ -6,6 +6,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class PushButton : MonoBehaviour
 {
     public Animation puerta;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,7 +16,5 @@ public class PushButton : MonoBehaviour
     public void AbrirPuerta()
     {
         puerta.Play();
-        Debug.Log("Abrí");
     }
-
 }

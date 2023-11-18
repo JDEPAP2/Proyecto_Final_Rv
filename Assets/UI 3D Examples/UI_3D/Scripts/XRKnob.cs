@@ -50,6 +50,9 @@ namespace UnityEngine.XR.Content.Interaction
             /// Sets a new anchor rotation while maintaining any previously accumulated offset
             /// </summary>
             /// <param name="direction">The XZ vector used to calculate a rotation angle</param>
+
+
+
             public void SetBaseFromVector(Vector3 direction)
             {
                 // Update any accumulated angle
@@ -117,6 +120,8 @@ namespace UnityEngine.XR.Content.Interaction
         [SerializeField]
         [Tooltip("Events to trigger when the knob is rotated")]
         ValueChangeEvent m_OnValueChange = new ValueChangeEvent();
+
+
 
         IXRSelectInteractor m_Interactor;
 
@@ -331,10 +336,13 @@ namespace UnityEngine.XR.Content.Interaction
 
         void SetKnobRotation(float angle)
         {
+            // Ajusta la rotación dentro de los límites establecidos por m_MinAngle y m_MaxAngle
+            angle = Mathf.Clamp(angle, m_MinAngle, m_MaxAngle);
+
             if (m_AngleIncrement > 0)
             {
-                var normalizeAngle = angle - m_MinAngle;
-                angle = (Mathf.Round(normalizeAngle / m_AngleIncrement) * m_AngleIncrement) + m_MinAngle;
+                var normalizeAngle = angle;
+                angle = (Mathf.Round(normalizeAngle / m_AngleIncrement) * m_AngleIncrement);
             }
 
             if (m_Handle != null)
