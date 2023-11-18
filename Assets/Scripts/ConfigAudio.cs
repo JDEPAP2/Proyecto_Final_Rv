@@ -9,7 +9,7 @@ public class ConfigAudio : MonoBehaviour
     public string activeMicro;
     private List<TMP_Dropdown.OptionData> options;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         options = new();
         foreach (var micro in Microphone.devices)
@@ -22,11 +22,13 @@ public class ConfigAudio : MonoBehaviour
             drp.AddOptions(options);
 
         if (options.Count > 0)
-            setMicro(0);
+           setMicro(options.Count - 1);  
+           drp.value = options.Count - 1;
     }
 
     public void setMicro(int i)
     {
         activeMicro = options[i].text;
+        
     }
 }

@@ -1,20 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class PushButton : MonoBehaviour
 {
-    public Animation puerta;
+    public UnityEvent onSelectEntered;
 
     // Start is called before the first frame update
     void Start()
     {
-        GetComponent<XRSimpleInteractable>().selectEntered.AddListener(x => AbrirPuerta());
+        GetComponent<XRSimpleInteractable>().selectEntered.AddListener(x => Selected());
     }
 
-    public void AbrirPuerta()
+    public void Selected()
     {
-        puerta.Play();
+        onSelectEntered.Invoke();
     }
 }

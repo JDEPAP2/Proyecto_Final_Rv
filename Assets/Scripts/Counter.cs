@@ -45,10 +45,11 @@ public class Counter : MonoBehaviour
         time = seconds;
         while(time > 0)
         {
-            txt.SetText(time.ToString());
             time--;
+            txt.SetText(time.ToString());
             yield return new WaitForSeconds(1);
         }
+        
         onTimeFinished.Invoke();
     }
 }

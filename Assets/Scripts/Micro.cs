@@ -52,18 +52,30 @@ public class Micro : MonoBehaviour
 
     public void initMicro()
     {
-        Microphone.End(config.activeMicro);
+        if (Microphone.IsRecording(config.activeMicro))
+        {
+            Microphone.End(config.activeMicro);
+        }
+
         if (config.activeMicro == null || config.activeMicro.Length == 0)
         {
             enabled = false;
         }
         else
         {
-            audioSource.clip = Microphone.Start(config.activeMicro, true, 1, 33200);
-            audioSource.outputAudioMixerGroup = mixer;
-            audioSource.loop = true;
-            audioSource.Play();
+            if(audioSource != null)
+            {
+                audioSource.clip = Microphone.Start(config.activeMicro, true, 1, 33200);
+                audioSource.outputAudioMixerGroup = mixer;
+                audioSource.loop = true;
+                audioSource.Play();
+            }
         }
+    }
+
+    public void setSensibility(float i)
+    {
+        sensibility = i;
     }
 
     void OnDisable()
