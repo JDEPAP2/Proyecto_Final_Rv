@@ -8,6 +8,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Game.unity
     guid: 1aaff57c872fb274f9b176d92a751bde
+  - enabled: 1
+    path: Assets/Scenes/Cinematica.unity
+    guid: 40c40f52901474d459de1a92ba60dfe0
+  - enabled: 1
+    path: Assets/Scenes/Intro.unity
+    guid: cd77084edb1c07843afc38334ab15e4c
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 6ff53d42e9f25ac4eb29f85697e7c09d, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: eb7e687006ff0f34886cb4dd59afec47, type: 2}
